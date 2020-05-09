@@ -3,7 +3,7 @@ import os
 import click
 
 
-from ultru_query.query import Query
+from .utils.query import Query
 
 from .utils import (
     init_ultru_client,

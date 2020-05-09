@@ -11,12 +11,12 @@ import uuid
 from .auth import authenticate
 from .exceptions import NotAuthorizedError, UserUnknownError
 from .globals import ULTRU_API_KEY, CLI_GLOBALS, _ULTR_JOB_STATUS, _ULTRU
-from ultru_query.base import BaseRequestsClass
-from ultru_query.engagements import Engagements
+from .base import BaseRequestsClass
+from .engagements import Engagements
 from .query import Query
 from .jobs import get_job_results, job_status, submit_job
-from ultru_query.record_types import Types
-from ultru_query.scores import Scores
+from .record_types import Types
+from .scores import Scores
 
 
 record_type_choices = Types.types.values()

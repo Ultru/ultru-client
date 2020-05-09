@@ -1,7 +1,7 @@
 import sys
 from urllib.parse import urljoin
 import requests
-from ultru_query.base import BaseRequestsClass
+from .base import BaseRequestsClass
 
 
 class Engagements(BaseRequestsClass):
