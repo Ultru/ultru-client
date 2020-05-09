@@ -147,13 +147,13 @@ def summarize_results(result):
     with open(results_file) as _file:
         result = json.load(_file)
     itms = {}
-    for x in result['body']['Items']:
+    for x in result['Items']:
          for k,v in x.items():
              if isinstance(v, str):
                 item_set = itms.setdefault(k, set())
                 item_set.add(v)
     summary = {
-        "Count": result['body']['Count'],
+        "Count": result['Count'],
         "Items": {k:list(v) for k,v in itms.items()}
     }
     return summary

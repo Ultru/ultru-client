@@ -92,7 +92,7 @@ def test_result_summary(results):
 
     _result = get_results()[0]
     summary = summarize_results(_result)
-    assert summary['Count'] == 7
+    assert summary['Count'] == 17
     assert len(summary['Items']) == 22
 
 
