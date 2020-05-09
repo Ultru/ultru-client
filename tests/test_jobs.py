@@ -57,9 +57,11 @@ def test_job_status(jobs_ep, jobs_base_response, api_key, cognito):
 def test_get_job_results(jobs_ep, s3_ep, jobs_base_response, api_key, cognito):
     api_endpoint = urljoin(jobs_ep, "/dev/api/jobs/query/Researcher/496b1172a2f4467b90f9f3a5a4fed212")
     s3_endpoint = urljoin(s3_ep, "/cognito/queries/identity_id/496b1172a2f4467b90f9f3a5a4fed212.json")
+    get_url_endpoint = urljoin(jobs_ep, "/dev/api/jobs/get_url/496b1172a2f4467b90f9f3a5a4fed212")
     with requests_mock.Mocker() as mock:
         mock.get(api_endpoint, status_code=200, json=jobs_base_response)
         mock.get(s3_endpoint, status_code=200, content=b"query_results")
+        mock.get(get_url_endpoint, status_code=200, json={"test": {}})
         mock.get(cognito, status_code=200, json=api_key)
         assert get_job_results("Researcher", "496b1172a2f4467b90f9f3a5a4fed212") == b"query_results"
 

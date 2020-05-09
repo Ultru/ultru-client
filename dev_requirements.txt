@@ -1,0 +1,5 @@
+-r requirements.txt
+moto
+pytest
+pytest-cov
+requests_mock

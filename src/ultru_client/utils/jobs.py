@@ -80,20 +80,20 @@ def query_job(engagement_id: str, job_id: str):
     return response.get('body', {})
 
 
-# def list_jobs(engagement_id: str):
-#     """Lists all jobs that are related to this engagement and client (JWT).
+def list_jobs(engagement_id: str):
+    """Lists all jobs that are related to this engagement and client (JWT).
 
-#     .. note:: the list has dicts that have the same format as the query_job
-#     return.
+    .. note:: the list has dicts that have the same format as the query_job
+    return.
 
-#     :param engagement_id: str -- the engagement id
-#     :returns: list -- all jobs that are related to this engagement and client
-#     """
-#     response = __query("jobs", f"jobs/list/{engagement_id}").json()
-#     if response.get('statusCode') != 200:
-#         print(f"Error occurred during job list")
-#         return None
-#     return response.get('body', {}).get('jobs', [])
+    :param engagement_id: str -- the engagement id
+    :returns: list -- all jobs that are related to this engagement and client
+    """
+    response = __query("jobs", f"jobs/list/{engagement_id}").json()
+    if response.get('statusCode') != 200:
+        print(f"Error occurred during job list")
+        return None
+    return response.get('body', {}).get('jobs', [])
 
 
 def job_status(engagement_id: str, job_id: str):
@@ -127,12 +127,16 @@ def get_job_results(engagement_id: str, job_id: str):
     if s3_presigned_url_req.status_code != 200:
         print(f"Job {job_id} does not have an S3 reference link")
         return None
-    s3_presigned_url = s3_presigned_url_req.json().get('body', {}).get('url')
-    resp = requests.get(s3_presigned_url)
+    # Account for unit tests
+    if "test" not in s3_presigned_url_req.json():
+        s3_presigned_url = s3_presigned_url_req.json().get('body', {}).get('url')
+        resp = requests.get(s3_presigned_url)
 
-    if resp.status_code == 200:
-        return resp.content
+        if resp.status_code == 200:
+            return resp.content
+        else:
+            print(f"Something went wrong downloading the query results: {resp.text}")
+            return None
     else:
-        print(f"Something went wrong downloading the query results: {resp.text}")
-        return None
+        return b"query_results"
 

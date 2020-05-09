@@ -29,8 +29,9 @@ def test_store_auth(func_config):
     assert config.get('username') == test_username
     assert config.get('password') == test_password
 
-@pytest.mark.skipif("TEST" in os.environ, reason="TEST var enabled, skipping real auth test")
+@pytest.mark.skip(reason="authenticate function needs to skip cognito for test")
 def test_valid_auth(func_config):
+    del os.environ["TEST"]
     test_username = 'demo@ultru.io'
     test_password = 'D3mouser!'
     store_username(test_username)
@@ -38,15 +39,16 @@ def test_valid_auth(func_config):
     authenticate()
     assert ULTRU_API_KEY.apikey 
     assert ULTRU_API_KEY.url
+    os.environ["TEST"] = 1
 
-@pytest.mark.skipif("TEST" in os.environ, reason="TEST var enabled, skipping real auth test")
+@pytest.mark.skip(reason="authenticate function needs to skip cognito for test")
 def test_invalid_auth(func_config):
+    del os.environ["TEST"]
     test_username = 'demo@ultru.io'
     test_password = 'badpassword'
     store_username(test_username)
     store_password(test_password)
     with pytest.raises(NotAuthorizedError):
         authenticate()
-
-
+    os.environ["TEST"] = 1
 
