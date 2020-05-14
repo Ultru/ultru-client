@@ -2,11 +2,14 @@
 
 #from distutils.core import setup
 import os
-from pip._internal.req import parse_requirements
 from setuptools import find_packages, setup
 import subprocess
 
-install_reqs = parse_requirements('requirements.txt', session=False)
+with open(os.path.abspath(os.path.join(os.path.dirname(__file__), "requirements.txt")), "r") as fp:
+    requirements = fp.read().split(os.linesep)
+    if not isinstance(requirements, list):
+        requirements = list()
+    requirements = [r for r in requirements if r != '']
 
 setup(name='ultru client',
       description='Query the Ultru API using a simple to use CLI',
@@ -15,9 +18,9 @@ setup(name='ultru client',
       package_dir={"": "src"},
       packages=find_packages("src"),
       version_format='{tag}.{commitcount}',
-      setup_requires=['setuptools-git-version'],
+      setup_requires=['wheel', 'setuptools-git-version'],
       python_requires='>=3.6',
-      install_requires=[str(x.req) for x in install_reqs],
+      install_requires=requirements,
       classifiers=[  # Optional
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
