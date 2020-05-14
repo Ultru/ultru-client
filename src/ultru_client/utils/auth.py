@@ -1,7 +1,7 @@
 from getpass import getpass
 from os import environ
 import boto3
-from warrant import Cognito
+from .contrib.cognito_util import Cognito
 from .config import get_config_value, put_config_value
 from .exceptions import NotAuthorizedError, UserUnknownError
 from .globals import CLI_GLOBALS, ULTRU_API_KEY
