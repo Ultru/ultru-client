@@ -6,7 +6,8 @@ from .config import get_config_value, put_config_value
 from .exceptions import NotAuthorizedError, UserUnknownError
 from .globals import CLI_GLOBALS, ULTRU_API_KEY
 
-USER_POOL_ID = "us-east-2_vF8cq6bRE"
+REGION = "us-east-2"
+USER_POOL_ID = f"{REGION}_vF8cq6bRE"
 CLIENT_ID = "2qr12uvr74uc683vp0ekg98u80"
 API_URL = {
     "legacy": "https://t24s740ln5.execute-api.us-east-2.amazonaws.com/dev/api/",
@@ -18,7 +19,7 @@ def __hint():
     print("Authenticate using your ultru.io credentials...")
 
 def __do_authenticate(username):
-    client = boto3.client('cognito-idp')
+    client = boto3.client('cognito-idp', region_name=REGION)
     password = __get_password()
     try:
         CLI_GLOBALS.COGNITO.authenticate(password)
@@ -61,7 +62,9 @@ def authenticate(api_type="legacy"):
     # Static
     username = __get_username()
     if CLI_GLOBALS.COGNITO is None:
-        CLI_GLOBALS.COGNITO = Cognito(USER_POOL_ID, CLIENT_ID, username=username)
+        CLI_GLOBALS.COGNITO = Cognito(USER_POOL_ID, CLIENT_ID,
+                                      username=username,
+                                      user_pool_region=REGION)
         __do_authenticate(username)
     else:
         try:
