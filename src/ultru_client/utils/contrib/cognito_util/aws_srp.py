@@ -7,9 +7,6 @@ import re
 
 import boto3
 import os
-import six
-
-from .exceptions import ForceChangePasswordException
 
 # Change log:
 # * Removed set_new_password_challenge function
@@ -58,7 +55,7 @@ def pad_hex(long_int):
     :param {Long integer|String} long_int Number or string to pad.
     :return {String} Padded hex string.
     """
-    if not isinstance(long_int, six.string_types):
+    if not isinstance(long_int, str):
         hash_str = long_to_hex(long_int)
     else:
         hash_str = long_int
@@ -217,7 +214,7 @@ class AWSSRP(object):
                 ChallengeResponses=challenge_response)
 
             if tokens.get('ChallengeName') == self.NEW_PASSWORD_REQUIRED_CHALLENGE:
-                raise ForceChangePasswordException('Change password before authenticating')
+                raise RuntimeError('Change password before authenticating')
 
             return tokens
         else:
