@@ -1,3 +1,6 @@
+boto3
+botocore
 click
 cmd2
--e git://github.com/maultru/warrant.git#egg=warrant
+pyjwt
+requests
