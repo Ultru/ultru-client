@@ -3,7 +3,6 @@
 #from distutils.core import setup
 import os
 from pip._internal.req import parse_requirements
-from pip._internal.req.req_file import ParsedRequirement
 from setuptools import find_packages, setup
 import subprocess
 
@@ -18,7 +17,7 @@ setup(name='ultru client',
       version_format='{tag}.{commitcount}',
       setup_requires=['setuptools-git-version'],
       python_requires='>=3.6',
-      install_requires=[str(x.requirement) for x in install_reqs],
+      install_requires=[str(x.req) for x in install_reqs],
       classifiers=[  # Optional
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
