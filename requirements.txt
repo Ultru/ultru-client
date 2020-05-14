@@ -2,4 +2,5 @@ boto3
 botocore
 click
 cmd2
-jose
+pyjwt
+requests

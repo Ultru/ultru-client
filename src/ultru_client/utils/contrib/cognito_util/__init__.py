@@ -4,7 +4,7 @@ import re
 import os
 import boto3
 import botocore
-from jose import jwt, JWTError
+import jwt
 import requests
 from .aws_srp import AWSSRP
 
@@ -215,18 +215,19 @@ class Cognito(object):
         key = list(filter(lambda x:x.get('kid') == kid,keys))
         return key[0]
 
-    def verify_token(self,token,id_name,token_use):
+    def verify_token(self, token, id_name, token_use):
         kid = jwt.get_unverified_header(token).get('kid')
-        unverified_claims = jwt.get_unverified_claims(token)
+        unverified_claims = jwt.decode(token, verify=False)
         token_use_verified = unverified_claims.get('token_use') == token_use
         if not token_use_verified:
             raise RuntimeError('Your {} token use could not be verified.')
         hmac_key = self.get_key(kid)
         try:
-            verified = jwt.decode(token,hmac_key,algorithms=['RS256'],
-                   audience=unverified_claims.get('aud'),
-                   issuer=unverified_claims.get('iss'))
-        except JWTError:
+            verified = jwt.decode(token, verify=False, key=hmac_key,
+                                  algorithms=['RS256'],
+                                  audience=unverified_claims.get('aud'),
+                                  issuer=unverified_claims.get('iss'))
+        except Exception as exc:
             raise RuntimeError('Your {} token could not be verified.')
         setattr(self,id_name,token)
         return verified
